@@ -161,3 +161,9 @@ cython_debug/
 
 # Streamlit
 .streamlit/secrets.toml
+
+
+# 데이터 폴더(용량 무거움)
+data/1-75.csv
+data/data.csv
+data/df.csv
