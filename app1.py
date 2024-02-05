@@ -12,18 +12,24 @@ from datetime import datetime
 
 # 큰 구현 내용
  # 첫 화면
- # 자치구, 법정동 고르면 첫 화면 사라지고 분석 내용 나오게
-  # 서울시 전체 거래 건과 비교한 거래 금액(평균, 최대, 최소), (연도 선택 후 월별)거래 건수, 건물 용도
+
+# 자치구, 법정동 고르면 첫 화면 사라지고 분석 내용 나오게
+ # 서울시 전체 거래 건과 비교한 거래 금액(평균, 최대, 최소), (연도 선택 후 월별)거래 건수, 건물 용도
+ # 각 탭
 
 # 사이드바
  # 자치구, 법정동 선택
    # 자치구 고르면 그 구에 해당되는 법정동만 고를 수 있게
  # 언어 선택 후 해당 페이지로 이동하게
- # 홈 화면으로
+ # 홈 화면으로 (???)
+
+
 
 def main():
     
     df=load_data()
+
+
 
     # 사이드바
     # 코드로 데이터 검색?
@@ -46,16 +52,12 @@ def main():
         elif lang == 'Korean':
             st.page_link('app1.py', label='Click here to explore in Korean')    # ???
                 
-
         st.divider()
 
-        # 홈 화면 버튼
-        if st.button('🏠첫 화면으로'):
-            st.stop()
-            st.rerun()
 
     # 출력하고자 하는 데이터 선택
     filtered_data = df.loc[(df['SGG_NM'] == selected_sgg_nm)&(df['BJDONG_NM']==selected_bjdong_nm)]
+
 
     if selected_bjdong_nm == None:
         st.title('Customed Searching Service for Foreigners')
@@ -63,9 +65,18 @@ def main():
         st.markdown('Welcome! 대시보드 제공 대상 및 목적 & 아래에 Overview 제공')
         st.write('Overview of Deal in Seoul') # Overview를 첫 tab에 넣을....아니다 구분하자
 
+
+    with st.sidebar:
+        # 홈 화면 버튼
+        if st.button('🏠첫 화면으로'):
+            selected_sgg_nm = None
+            st.stop()
+            st.rerun()           # ????
+
+
     # 지역 골랐을 때 페이지 출력되게
     if selected_bjdong_nm != None:
-        tab1, tab2, tab3 = st.tabs(["Overview", "상세 조회", "tab3"])
+        tab1, tab2, tab3 = st.tabs(["Overview", "상세 조회", "타 법정동 비교"])
         with tab1:
             st.subheader('거래 금액')
             st.markdown('선택한 지역의 거래금액을 서울시 전체의 매매건과 비교하여 보여드립니다!')
@@ -101,9 +112,27 @@ def main():
         with tab2:
             st.header('상세한 검색 조건')
             st.write('세부 옵션을 설정하세요.')
+        
+        # 여기 형식 다듬을 예정, 각 정보를 구분해서 보여주는 것이 목적이었음
+            col1, col2, col3 = st.columns(3)
+            with col1:
+                st.write('물건 금액', filtered_data_year['OBJ_AMT'])
+            with col2:
+                st.write('주소', filtered_data_year[['BLDG_NM','BONBEON', 'BUBEON', 'FLOOR']])
+            with col3:
+                st.write('상세 정보', filtered_data_year[['HOUSE_TYPE','BUILD_YEAR', 'BLDG_AREA', 'TOT_AREA','DEAL_YMD_dt']])
 
+        with tab3:
+            # 금액대 설정 후 같은 구 내에서 다른 동 정보
+            st.write(f'{selected_sgg_nm} 내 다른 동의 거래 건을 확인하세요!')
+            values = st.slider(
+                'Select a range of values',
+                1000.0, 100000.0, (1000.0, 4000.0))
+            st.write('가격 범위:', values)
 
-
+            others = df.loc[(df.SGG_NM == selected_sgg_nm) & (df.BJDONG_NM != selected_bjdong_nm), :]
+            st.write(others.loc[(values[0] <= others.OBJ_AMT) & (others.OBJ_AMT <= values[1]),:])
+            
 
 
 
