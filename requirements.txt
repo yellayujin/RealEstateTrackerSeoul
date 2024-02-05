@@ -1,6 +1,7 @@
 sktime
 pmdarima
 pandas
+numpy
 matplotlib
 seaborn
 plotly
