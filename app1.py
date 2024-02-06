@@ -217,7 +217,8 @@ def main():
 
         # pie chart 그리기
         plot_pie_chart(may_2023_deals)
-    df = load_data()
+
+        df = load_data()
 
 
     # 지역 골랐을 때 페이지 출력되게
