@@ -34,7 +34,7 @@ def Range(x):
         return "100평대 이상"
     
 def load_geojsondata():
-    gdf=gpd.read_file('./data/서울_자치구_경계_2017.geojson')
+    gdf=gpd.read_file('서울_자치구_경계_2017.geojson')
     return gdf
 
 
