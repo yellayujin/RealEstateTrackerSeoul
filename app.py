@@ -104,8 +104,13 @@ def main():
     df=load_data()
     df['DEAL_YMD'] = pd.to_datetime(df['DEAL_YMD'], format = '%Y%m%d')  # 날짜형 변환
     df['CNTL_YMD'] = pd.to_datetime(df['CNTL_YMD'], format = '%Y%m%d').dt.date
-    df = df.astype({'ACC_YEAR': 'str','BUILD_YEAR':'str', 'BONBEON': 'str', 'BUBEON': 'str'})  # 본번, 부번은 끝에 .0붙음(결측 때문?), 건축연도는 후에 계산(tab3, line 263)때문에 잠깐 패스
-    df['BUILD_YEAR'] = df['BUILD_YEAR'].str[:4]
+    df = df.astype({'ACC_YEAR': 'str', 'BONBEON': 'str', 'BUBEON': 'str'})  # 본번, 부번은 끝에 .0붙음(결측 때문?), 건축연도는 후에 계산(tab3, line 263)때문에 잠깐 패스
+    
+    '''
+    df = df.astype({'BUILD_YEAR':'str'})    
+    df['BUILD_YEAR'] = df['BUILD_YEAR'].str.rstrip('.0')'''
+    df['BONBEON'] = df['BONBEON'].str.rstrip('.0')
+    df['BUBEON'] = df['BUBEON'].str.rstrip('.0')
 
     # 사이드바
     with st.sidebar:
@@ -224,7 +229,7 @@ def main():
 
 
 
-        with tab2:        
+        with tab2: 
             st.write(f'{selected_sgg_nm} {selected_bjdong_nm}의 실거래건 중 관심있는 정보를 확인하세요!')
             filtered_data_year['OBJ_AMT_LV'] = pd.qcut(filtered_data_year['OBJ_AMT'], q = 5, labels = ['낮음', '중간낮음', '중간', '중간높음', '높음'])
             options = st.multiselect(
@@ -244,8 +249,8 @@ def main():
             st.write(f'{selected_sgg_nm} 내 다른 동의 거래 건을 확인하세요!')
             option = st.selectbox('검색 옵션', options = ['건물 정보로 조회','건물 가격으로 조회'] )
             st.divider()
+
             if option == '건물 정보로 조회':
-                df = df.astype({'BUILD_YEAR': 'int'})
                 st.subheader(option)
                 gdf=load_geojsondata()
                 df['PYEONG']=df['BLDG_AREA']/3.3
@@ -262,10 +267,11 @@ def main():
                 buildyear=st.number_input('건축연도를 입력하세요',step=1)
                 alpha=st.slider('오차범위를 선택하세요',0,10,1)
                 
+                '''df = df.astype({'BUILD_YEAR': 'int'})  # 잠깐 정수형으로'''
                 filtered_df = df.loc[(df['HOUSE_TYPE']=='아파트')&
                                     ((df['FLOOR'] <= floor+alpha)&(df['FLOOR'] >= floor-alpha))&
                                     ((df['PYEONG'] <= pyeong+alpha)&(df['PYEONG'] >= pyeong-alpha))&
-                                    ((df['BUILD_YEAR'] <=buildyear+alpha))&(df['BUILD_YEAR'] >= buildyear-alpha)]
+                                    ((df['BUILD_YEAR'] <= buildyear+alpha))&(df['BUILD_YEAR'] >= buildyear-alpha)]
                 
                 avg_obj_amt = filtered_df.groupby('SGG_NM')['OBJ_AMT'].mean().reset_index()
                 avg_obj_amt.columns = ['SGG_NM', 'Avg_Obj_Amt']
@@ -286,18 +292,22 @@ def main():
                                         hover_data={'SGG_NM': True, 'Avg_Obj_Amt': True}
                                         )
                 st.plotly_chart(fig)
-                df['BUILD_YEAR'] = df['BUILD_YEAR'].str[:4]
-        
-            # 금액대 설정 후 같은 구 내에서 다른 동 정보
-            else:
+                     
+            else:        
                 values = st.slider(
                     'Select a range of values',
                     1000.0, 3000000.0, (10000.0, 4000.0))
                 st.write('가격 범위:', values)
 
+                # 금액대 설정 후 같은 구 내에서 다른 동 정보
+                df = df.astype({'BUILD_YEAR':'str'})    
+                df['BUILD_YEAR'] = df['BUILD_YEAR'].str.rstrip('.0')
                 others = df.loc[(df.SGG_NM == selected_sgg_nm) & (df.BJDONG_NM != selected_bjdong_nm), :]
                 others['DEAL_YMD'] = others['DEAL_YMD'].dt.date
                 st.write(others.loc[(values[0] <= others.OBJ_AMT) & (others.OBJ_AMT <= values[1]),:])
+
+
+
         
 
 
