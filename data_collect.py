@@ -6,6 +6,7 @@ import geopandas as gpd
 def load_data():
     df=pd.read_csv('https://raw.githubusercontent.com/ghkstod/TIL/main/data.txt',encoding='utf-8',sep='\t')
     df.drop(['Column1'],axis=1,inplace=True)
+    df['DEAL_YMD'] = pd.to_datetime(df['DEAL_YMD'], format = '%Y%m%d')
     return df
 
 def Range(x):
@@ -33,8 +34,10 @@ def Range(x):
         return "100평대 이상"
     
 def load_geojsondata():
-    gdf=gpd.read_file('서울_자치구_경계_2017.geojson')
+    gdf=gpd.read_file('./data/서울_자치구_경계_2017.geojson')
     return gdf
+
+
 
 
     
