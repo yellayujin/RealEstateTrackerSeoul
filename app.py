@@ -2,6 +2,7 @@
 
 import streamlit as st 
 import pandas as pd
+import numpy as np
 from data_collect import load_data
 from data_collect import Range  
 from data_collect import load_geojsondata   
@@ -101,18 +102,23 @@ def plot_bar_chart(deals):
 def main():
     
     df=load_data()
+    df['DEAL_YMD'] = pd.to_datetime(df['DEAL_YMD'], format = '%Y%m%d')  # 날짜형 변환
+    df = df.astype({'ACC_YEAR': 'str', 'BONBEON': 'str', 'BUBEON': 'str'})  # 본번, 부번은 끝에 .0붙음(결측 때문?), 건축연도는 후에 계산(tab3, line 263)때문에 잠깐 패스
 
     # 사이드바
-    # 코드로 데이터 검색?
     with st.sidebar:
         st.header('Filter')
         st.subheader('선택한 지역의 실거래 데이터를 분석해드립니다!')
         # 구 선택
-        selected_sgg_nm = st.selectbox('자치구명', options= df['SGG_NM'].unique(), index=None, placeholder='구를 선택하세요.')
+        sgg_nm_sort=sorted(df['SGG_NM'].unique())
+        selected_sgg_nm = st.selectbox(
+            '구를 선택하세요.',
+            options=list(sgg_nm_sort)
+        )   
 
         # 동 선택(조건: 선택된 구 안에 있는 동을 보여줘야 함)
         selected_bjdong_nm = st.selectbox('법정동명', 
-                                            options= df.loc[df['SGG_NM']==selected_sgg_nm, :].BJDONG_NM.unique())
+                                            options= sorted(df.loc[df['SGG_NM']==selected_sgg_nm, :].BJDONG_NM.unique()))
         st.divider()
         
         # 홈 화면 버튼
@@ -138,8 +144,8 @@ def main():
             margin: 50px;
             """
 
-        st.title('대시보드 이름')
-        st.markdown('소개 문구')
+        st.title('부동산 트랙커: 서울')
+        st.markdown('서울시 전체 부동산 거래량 및 통계 정보를 얻을 때, 지역별 부동산 유형에 따른 거래 동향을 알아보고 싶을 때 부동산 트랙커를 통해 확인하세요.')
 
 
         # 2023년 05월 거래량 계산
@@ -237,6 +243,7 @@ def main():
             option = st.selectbox('검색 옵션', options = ['건물 정보로 조회','건물 가격으로 조회'] )
             st.divider()
             if option == '건물 정보로 조회':
+                
                 st.subheader(option)
                 gdf=load_geojsondata()
                 df['PYEONG']=df['BLDG_AREA']/3.3
@@ -254,9 +261,9 @@ def main():
                 alpha=st.slider('오차범위를 선택하세요',0,10,1)
                 
                 filtered_df = df.loc[(df['HOUSE_TYPE']=='아파트')&
-                                    ((df['FLOOR']<=floor+alpha)&(df['FLOOR']>=floor-alpha))&
-                                    ((df['PYEONG']<=pyeong+alpha)&(df['PYEONG']>=pyeong-alpha))&
-                                    ((df['BUILD_YEAR']<=buildyear+alpha)&(df['BUILD_YEAR']>=buildyear-alpha))]
+                                    ((df['FLOOR'] <= floor+alpha)&(df['FLOOR'] >= floor-alpha))&
+                                    ((df['PYEONG'] <= pyeong+alpha)&(df['PYEONG'] >= pyeong-alpha))&
+                                    ((df['BUILD_YEAR'] <=buildyear+alpha))&(df['BUILD_YEAR'] >= buildyear-alpha)]
                 
                 avg_obj_amt = filtered_df.groupby('SGG_NM')['OBJ_AMT'].mean().reset_index()
                 avg_obj_amt.columns = ['SGG_NM', 'Avg_Obj_Amt']
@@ -286,6 +293,7 @@ def main():
                 st.write('가격 범위:', values)
 
                 others = df.loc[(df.SGG_NM == selected_sgg_nm) & (df.BJDONG_NM != selected_bjdong_nm), :]
+                others['DEAL_YMD'] = others['DEAL_YMD'].dt.date
                 st.write(others.loc[(values[0] <= others.OBJ_AMT) & (others.OBJ_AMT <= values[1]),:])
         
 

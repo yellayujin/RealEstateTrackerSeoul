@@ -12,7 +12,7 @@ def load_data():
     df['Pyeong']=df['BLDG_AREA']/3.3
     df['Pyeong']=df['Pyeong'].astype('int64')
     df['Pyeong_range']=df['Pyeong'].apply(Range)
-    df['DEAL_YMD'] = pd.to_datetime(df['DEAL_YMD'], format = '%Y%m%d')
+
     return df
 
 def Range(x):
