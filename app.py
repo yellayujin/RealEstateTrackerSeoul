@@ -1,5 +1,4 @@
 # -*- coding:utf-8 -*-
-# 19년, 24년(양 끝 연도) 제거해야함
 
 import streamlit as st 
 import pandas as pd
@@ -75,9 +74,6 @@ def find_highest_avg_amt_area(df, year, month):
     return highest_avg_amt_area, highest_avg_amt_value
 
 def get_darker_color(color, factor=0.7):
-    """
-    Function to get a darker shade of a given color.
-    """
     r, g, b = [int(color[i:i+2], 16) for i in (1, 3, 5)]
     r = max(0, int(r * factor))
     g = max(0, int(g * factor))
@@ -139,10 +135,8 @@ def main():
         st.subheader('Language')
         lang = st.radio('Select Your Language', ['English', 'Korean'], index = 1)
         if lang == 'English':
-            st.page_link('app.py', label = 'Click here to explore in English')
-        elif lang == 'Korean':
-            st.page_link('app.py', label='Click here to explore in Korean')    # ???
-                
+            st.page_link('app.py', label = 'Click here to explore in English')  # 이 부분 eng 대시보드 링크
+
         st.divider()
 
 
