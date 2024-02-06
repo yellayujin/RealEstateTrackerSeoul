@@ -135,7 +135,7 @@ def main():
         st.subheader('Language')
         lang = st.radio('Select Your Language', ['English', 'Korean'], index = 1)
         if lang == 'English':
-            st.page_link('app.py', label = 'Click here to explore in English')  # 이 부분 eng 대시보드 링크
+            st.page_link('https://yellayujin-miniproject2-app-eng-aapmoa.streamlit.app/', label = 'Click here to explore in English')  
 
         st.divider()
 
