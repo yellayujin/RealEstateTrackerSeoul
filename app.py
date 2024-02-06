@@ -295,7 +295,7 @@ def main():
             else:
                 values = st.slider(
                     'Select a range of values',
-                    0, 1000000.0, (10000.0, 40000.0))
+                    1000.0, 3000000.0, (10000.0, 4000.0))
                 st.write('가격 범위:', values)
 
                 others = df.loc[(df.SGG_NM == selected_sgg_nm) & (df.BJDONG_NM != selected_bjdong_nm), :]
