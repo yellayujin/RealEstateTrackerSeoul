@@ -241,6 +241,7 @@ def main():
                 st.divider()
                 st.write('키워드 검색 결과')
                 st.caption('각 탭을 누르면 오름차순(내림차순) 확인이 가능합니다.')
+                # groupby로 뭔가 될 듯 한데...
                 st.write(filtered_data_year[options])
                     
 
