@@ -11,19 +11,6 @@ from datetime import datetime
 import requests
 from io import StringIO
 
-# 큰 구현 내용
- # 첫 화면
-
-# 자치구, 법정동 고르면 첫 화면 사라지고 분석 내용 나오게
- # 서울시 전체 거래 건과 비교한 거래 금액(평균, 최대, 최소), (연도 선택 후 월별)거래 건수, 건물 용도
- # 각 탭
-
-# 사이드바
- # 자치구, 법정동 선택
-   # 자치구 고르면 그 구에 해당되는 법정동만 고를 수 있게
- # 언어 선택 후 해당 페이지로 이동하게
- # 홈 화면으로 (???)
-
 
 def load_deals_by_month(df, year, month):
     # 지정한 년도와 월에 해당하는 거래 데이터를 불러옴
@@ -211,8 +198,7 @@ def main():
                 st.metric(label = '최소(만 원)', value = round(filtered_data.OBJ_AMT.min(), 1), delta = str(round(filtered_data.OBJ_AMT.min() - df.OBJ_AMT.min(), 1)))
 
             st.divider()
-            st.subheader('거래 건수') 
-            # 2020, 21, 22, 23년도의 거래 건수 추이 비교??
+            st.subheader('월별 거래 건수 추이') 
 
             # 거래 일자를 날짜형으로
             # filtered_data['DEAL_YMD_dt'] = pd.to_datetime(filtered_data['DEAL_YMD'], format='ISO8601')  
@@ -223,7 +209,7 @@ def main():
             st.line_chart(filtered_data_year['DEAL_YMD'].dt.month_name().value_counts())   
 
 
-            # 건물 용도
+            # 건물 용도별 거래량
             st.subheader('건물 용도')
             st.bar_chart(filtered_data['HOUSE_TYPE'].value_counts())
 
