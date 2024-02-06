@@ -139,9 +139,9 @@ def main():
         st.subheader('Language')
         lang = st.radio('Select Your Language', ['English', 'Korean'], index = 1)
         if lang == 'English':
-            st.page_link('app1.py', label = 'Click here to explore in English')
+            st.page_link('app.py', label = 'Click here to explore in English')
         elif lang == 'Korean':
-            st.page_link('app1.py', label='Click here to explore in Korean')    # ???
+            st.page_link('app.py', label='Click here to explore in Korean')    # ???
                 
         st.divider()
 
