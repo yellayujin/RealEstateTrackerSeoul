@@ -103,6 +103,7 @@ def main():
     
     df=load_data()
     df['DEAL_YMD'] = pd.to_datetime(df['DEAL_YMD'], format = '%Y%m%d')  # 날짜형 변환
+    df['CNTL_YMD'] = pd.to_datetime(df['CNTL_YMD'], format = '%Y%m%d').dt.date
     df = df.astype({'ACC_YEAR': 'str', 'BONBEON': 'str', 'BUBEON': 'str'})  # 본번, 부번은 끝에 .0붙음(결측 때문?), 건축연도는 후에 계산(tab3, line 263)때문에 잠깐 패스
 
     # 사이드바
@@ -243,7 +244,6 @@ def main():
             option = st.selectbox('검색 옵션', options = ['건물 정보로 조회','건물 가격으로 조회'] )
             st.divider()
             if option == '건물 정보로 조회':
-                
                 st.subheader(option)
                 gdf=load_geojsondata()
                 df['PYEONG']=df['BLDG_AREA']/3.3
