@@ -25,15 +25,6 @@ from io import StringIO
  # 언어 선택 후 해당 페이지로 이동하게
  # 홈 화면으로 (???)
 
-@st.cache_data
-def load_data_temp():
-    #SSL 인증서 검증 비활성화를 위해 requests 모듈 사용
-    response = requests.get('https://raw.githubusercontent.com/ghkstod/TIL/main/data.txt', verify=False)
-    df=pd.read_csv(StringIO(response.text),encoding='utf-8',sep='\t')
-    df.drop(['Column1'],axis=1,inplace=True)
-    # 'DEAL_YMD'열을 날짜 형식으로 변환
-    df['DEAL_YMD'] = pd.to_datetime(df['DEAL_YMD'], format = '%Y%m%d')
-    return df
 
 def load_deals_by_month(df, year, month):
     # 지정한 년도와 월에 해당하는 거래 데이터를 불러옴
@@ -94,35 +85,25 @@ def get_darker_color(color, factor=0.7):
     return f"#{r:02x}{g:02x}{b:02x}"
 
 def plot_pie_chart(deals):
-    '''
-    fig = px.pie(deals, names = 'SGG_NM', title = '2023년 05월 서울시 자치구별 거래 비율')
-    fig.update_traces(textposition = 'inside', textinfo = 'percent+label')
-    st.plotly_chart(fig, use_container_width = True)
-    '''
-
-    # Custom color scale
     colors = px.colors.sequential.Blues
 
-    # Create a pie chart
     fig = px.pie(deals, 
                  names='SGG_NM', 
                  title='2023년 05월 서울시 자치구별 거래 비율',
                  color='SGG_NM',
                  color_discrete_sequence=colors,
                  labels={'SGG_NM': '자치구명'},
-                 hole=0.3,  # Make it a donut chart
+                 hole=0.3,
                  )
 
-    # Update pie chart layout
-    fig.update_traces(textposition='inside', textinfo='percent+label', pull=[0.1, 0.1, 0.1, 0.1])  # Pull slices apart for emphasis
+    fig.update_traces(textposition='inside', textinfo='percent+label', pull=[0.1, 0.1, 0.1, 0.1])  
     fig.update_layout(
-        showlegend=False,  # Hide legend
-        margin=dict(l=0, r=0, b=0, t=30),  # Adjust margin
-        paper_bgcolor='rgba(0,0,0,0)',  # Transparent background
-        plot_bgcolor='rgba(0,0,0,0)',  # Transparent plot background
+        showlegend=False,  
+        margin=dict(l=0, r=0, b=0, t=30),  
+        paper_bgcolor='rgba(0,0,0,0)', 
+        plot_bgcolor='rgba(0,0,0,0)',  
     )
 
-    # Display the pie chart in Streamlit
     st.plotly_chart(fig, use_container_width=True)
 
 
@@ -170,7 +151,6 @@ def main():
 
 
     if selected_bjdong_nm == None:
-        df = load_data_temp()
         # 여백 추가를 위한 스타일 지정
         main_style = """
             padding : 10px;
@@ -217,8 +197,6 @@ def main():
 
         # pie chart 그리기
         plot_pie_chart(may_2023_deals)
-
-        df = load_data()
 
 
     # 지역 골랐을 때 페이지 출력되게
