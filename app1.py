@@ -26,7 +26,7 @@ from io import StringIO
  # 홈 화면으로 (???)
 
 @st.cache_data
-def load_data():
+def load_data_temp():
     #SSL 인증서 검증 비활성화를 위해 requests 모듈 사용
     response = requests.get('https://raw.githubusercontent.com/ghkstod/TIL/main/data.txt', verify=False)
     df=pd.read_csv(StringIO(response.text),encoding='utf-8',sep='\t')
@@ -126,12 +126,12 @@ def plot_pie_chart(deals):
     st.plotly_chart(fig, use_container_width=True)
 
 
-
-
 def plot_bar_chart(deals):
     fig = px.bar(deals, x = 'HOUSE_TYPE', title = '2023년 05월 부동산 거래 유형별 거래 건수', labels = {'HOUSE_TYPE': '부동산 유형', 'count': '거래 건수'})
     fig.update_layout(xaxis_title = '부동산 유형', yaxis_title = '거래 건수')
     st.plotly_chart(fig, use_container_width= True)
+
+
 
 
 def main():
@@ -170,7 +170,8 @@ def main():
 
 
     if selected_bjdong_nm == None:
-    # 여백 추가를 위한 스타일 지정
+        df = load_data_temp()
+        # 여백 추가를 위한 스타일 지정
         main_style = """
             padding : 10px;
             margin: 50px;
@@ -216,6 +217,7 @@ def main():
 
         # pie chart 그리기
         plot_pie_chart(may_2023_deals)
+    df = load_data()
 
 
     # 지역 골랐을 때 페이지 출력되게
