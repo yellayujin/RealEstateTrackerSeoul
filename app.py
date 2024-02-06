@@ -192,6 +192,8 @@ def main():
         # pie chart 그리기
         plot_pie_chart(may_2023_deals)
 
+        
+
 
     # 지역 골랐을 때 페이지 출력되게
     if selected_bjdong_nm != None:
@@ -228,17 +230,19 @@ def main():
 
 
 
-        with tab2:           
+        with tab2:        
             st.write(f'{selected_sgg_nm} {selected_bjdong_nm}의 실거래건 중 관심있는 정보를 확인하세요!')
+            filtered_data_year['OBJ_AMT_LV'] = pd.qcut(filtered_data_year['OBJ_AMT'], q = 5, labels = ['낮음', '중간낮음', '중간', '중간높음', '높음'])
             options = st.multiselect(
                 '관심 키워드를 선택하세요.',
-                filtered_data.columns)
+                ['OBJ_AMT_LV', 'HOUSE_TYPE', 'LAND_GBN_NM', 'DEAL_YMD', 'BUILD_YEAR'])
+            
             if len(options) != 0:
                 st.divider()
                 st.write('키워드 검색 결과')
                 st.caption('각 탭을 누르면 오름차순(내림차순) 확인이 가능합니다.')
-                st.write(filtered_data[options])
-            
+                st.write(filtered_data_year[options])
+                    
 
         with tab3:
             # st.header('상세 검색')
@@ -272,7 +276,7 @@ def main():
 
                 #geojson과 데이터프레임 병합
                 merged_gdf = gdf.merge(avg_obj_amt, left_on='SIG_KOR_NM', right_on='SGG_NM')
-                
+            
                 fig = px.choropleth_mapbox(merged_gdf,
                                         geojson=merged_gdf.geometry.__geo_interface__,
                                         locations=merged_gdf.index,
@@ -286,17 +290,17 @@ def main():
                                         hover_data={'SGG_NM': True, 'Avg_Obj_Amt': True}
                                         )
                 st.plotly_chart(fig)
-            
+        
             # 금액대 설정 후 같은 구 내에서 다른 동 정보
             else:
                 values = st.slider(
                     'Select a range of values',
-                    1000.0, 100000.0, (1000.0, 4000.0))
+                    1000.0, 300000000.0, (10000.0, 40000.0))
                 st.write('가격 범위:', values)
 
                 others = df.loc[(df.SGG_NM == selected_sgg_nm) & (df.BJDONG_NM != selected_bjdong_nm), :]
                 st.write(others.loc[(values[0] <= others.OBJ_AMT) & (others.OBJ_AMT <= values[1]),:])
-            
+        
 
 
 
