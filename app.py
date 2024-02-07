@@ -301,7 +301,7 @@ def main():
             filtered_data_year['BUILD_YEAR'] = np.where(filtered_data_year['BUILD_YEAR']==np.nan, 0, filtered_data_year['BUILD_YEAR'])
             filtered_data_year = filtered_data_year.astype({'BUILD_YEAR':'str'})    
             filtered_data_year['BUILD_YEAR'] = filtered_data_year['BUILD_YEAR'].str[:4]
-            options = st.multiselect(
+            options = st.selectbox(
                 '관심 키워드를 선택하세요.', options_dict.keys())
                 # ['물건금액대', '건물유형', '지번구분명', '거래일', '건축일']
             
@@ -311,21 +311,23 @@ def main():
                 st.write('키워드 검색 결과')
                 st.caption('각 탭을 누르면 오름차순(내림차순) 확인이 가능합니다.')
                 col = []
-                for key in options:
-                    colname = options_dict[key]
-                    col.append(options_dict[key])
-                    table = pd.DataFrame(filtered_data_year.groupby(by = colname, observed=True))
-                    unique = []
-                    for i in table.iloc[:,0]:
-                        st.write(i)
-                        st.write(filtered_data_year[filtered_data_year[colname] == i].describe().T)
-                        unique.append(i)
-                        st.divider()
-                    st.write(f'유형 별 전체 데이터 조회')
-                    selected_unique = st.radio('조회할 유형 선택', unique)
-                    st.write(filtered_data_year[filtered_data_year[colname] == selected_unique])
+                key = options
+                colname = options_dict[key]
+                col.append(options_dict[key])
+                table = pd.DataFrame(filtered_data_year.groupby(by = colname, observed=True))
+                unique = []
+                for i in table.iloc[:,0]:
+                    st.write(i)
+                    st.write(filtered_data_year[filtered_data_year[colname] == i].describe().T)
+                    unique.append(i)
                     st.divider()
-                    
+                st.write(f'유형 별 전체 데이터 조회')
+                selected_unique = st.radio('조회할 유형 선택', unique)
+                if selected_unique == '단독다가구':
+                    st.caption('Note: 단독 다가구의 경우 본번, 부번과 같은 상세정보는 제공되지 않습니다.')
+                st.write(filtered_data_year[filtered_data_year[colname] == selected_unique])
+                st.divider()
+                
                 # st.write(filtered_data_year[col])                 # groupby로 뭔가 될 듯 한데...
             # filtered_data_year = filtered_data_year.astype({'BUILD_YEAR':'int'})           
             
