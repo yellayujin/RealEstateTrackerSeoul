@@ -233,6 +233,7 @@ def main():
             st.write(f'{selected_sgg_nm} {selected_bjdong_nm}의 실거래건 중 관심있는 정보를 확인하세요!')
             filtered_data_year['OBJ_AMT_LV'] = pd.qcut(filtered_data_year['OBJ_AMT'], q = 5, labels = ['낮은 가격대', '중간낮은 가격대', '중간 가격대', '중간높은 가격대', '높은 가격대'])
             filtered_data_year['DEAL_YMD'] = filtered_data_year['DEAL_YMD'].dt.date
+            filtered_data_year['BUILD_YEAR'] = np.where(filtered_data_year['BUILD_YEAR']==np.nan, 0, filtered_data_year['BUILD_YEAR'])
             filtered_data_year = filtered_data_year.astype({'BUILD_YEAR':'str'})    
             filtered_data_year['BUILD_YEAR'] = filtered_data_year['BUILD_YEAR'].str.rstrip('.0')
             options = st.multiselect(
