@@ -302,7 +302,7 @@ def main():
             filtered_data_year = filtered_data_year.astype({'BUILD_YEAR':'str'})    
             filtered_data_year['BUILD_YEAR'] = filtered_data_year['BUILD_YEAR'].str[:4]
             options = st.selectbox(
-                '관심 키워드를 선택하세요.', options_dict.keys())
+                '관심 키워드를 선택하세요.', options_dict.keys(), index=None)
                 # ['물건금액대', '건물유형', '지번구분명', '거래일', '건축일']
             
 
