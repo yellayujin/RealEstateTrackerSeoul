@@ -351,10 +351,10 @@ def main():
                     '용도를 선택하세요.',
                     options=list(df['HOUSE_TYPE'].unique())
                 )
-                floor=st.number_input('층수를 입력하세요',step=1,min_value=-1,max_value=68)
-                pyeong=st.number_input('평수를 입력하세요',step=1)
-                buildyear=st.number_input('건축연도를 입력하세요',step=1)
-                alpha=st.slider('오차범위를 선택하세요',0,10,1)
+                floor=st.number_input('층수를 입력하세요',step=1,min_value=-1,max_value=68, value = 1)
+                pyeong=st.number_input('평수를 입력하세요',step=1, value = 25)
+                buildyear=st.number_input('건축연도를 입력하세요',step=1, value = 2010)
+                alpha=st.slider('오차범위를 선택하세요',0,10,2)
                 
                 filtered_df = df.loc[(df['HOUSE_TYPE']=='아파트')&
                                     ((df['FLOOR'] <= floor+alpha)&(df['FLOOR'] >= floor-alpha))&
