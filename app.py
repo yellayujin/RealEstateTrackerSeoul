@@ -235,7 +235,7 @@ def main():
             filtered_data_year['DEAL_YMD'] = filtered_data_year['DEAL_YMD'].dt.date
             filtered_data_year['BUILD_YEAR'] = np.where(filtered_data_year['BUILD_YEAR']==np.nan, 0, filtered_data_year['BUILD_YEAR'])
             filtered_data_year = filtered_data_year.astype({'BUILD_YEAR':'str'})    
-            filtered_data_year['BUILD_YEAR'] = filtered_data_year['BUILD_YEAR'].str.rstrip('.0')
+            # filtered_data_year['BUILD_YEAR'] = filtered_data_year['BUILD_YEAR'].str.rstrip('.0')
             options = st.multiselect(
                 '관심 키워드를 선택하세요.', options_dict.keys())
                 # ['물건금액대', '건물유형', '지번구분명', '거래일', '건축일']
