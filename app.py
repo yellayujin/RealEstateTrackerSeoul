@@ -117,7 +117,7 @@ def main():
         sgg_nm_sort=sorted(df['SGG_NM'].unique())
         selected_sgg_nm = st.selectbox(
             '구를 선택하세요.',
-            options=list(sgg_nm_sort)
+            options=list(sgg_nm_sort), index = None
         )   
 
         # 동 선택(조건: 선택된 구 안에 있는 동을 보여줘야 함)
