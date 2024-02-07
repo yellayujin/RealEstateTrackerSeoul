@@ -335,7 +335,7 @@ def main():
 
         with tab3:
             # st.header('상세 검색')
-            st.write(f'{selected_sgg_nm} 내 다른 동의 거래 건을 확인하세요!')
+            st.write(f'{selected_sgg_nm} 내 다른 동과 거래 내용을 비교하세요!')
             option = st.selectbox('검색 옵션', options = ['건물 정보로 조회','건물 가격으로 조회'] )
             st.divider()
 
@@ -373,7 +373,7 @@ def main():
                                         color='Avg_Obj_Amt',
                                         color_continuous_scale="Viridis",
                                         mapbox_style="carto-positron",
-                                        zoom=10,
+                                        zoom=9.4,
                                         center={"lat": 37.5650172, "lon": 126.9782914},
                                         opacity=0.5,
                                         labels={'Avg_Obj_Amt': '평균 거래액'},
