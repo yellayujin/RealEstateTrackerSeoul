@@ -77,10 +77,10 @@ def plot_pie_chart(deals):
                  color='SGG_NM',
                  color_discrete_sequence=colors,
                  labels={'SGG_NM': '자치구명'},
-                 hole=0.3,
+                 hole=0.4,
                  )
 
-    fig.update_traces(textposition='inside', textinfo='percent+label', pull=[0.1, 0.1, 0.1, 0.1])  
+    fig.update_traces(textposition='inside', textinfo='percent+label', pull = [0, 0,0, 0, 0, 0, 0.1])  
     fig.update_layout(
         showlegend=False,  
         margin=dict(l=0, r=0, b=0, t=30),  
