@@ -234,14 +234,15 @@ def main():
             filtered_data_year['OBJ_AMT_LV'] = pd.qcut(filtered_data_year['OBJ_AMT'], q = 5, labels = ['낮음', '중간낮음', '중간', '중간높음', '높음'])
             options = st.multiselect(
                 '관심 키워드를 선택하세요.',
-                ['OBJ_AMT_LV', 'HOUSE_TYPE', 'LAND_GBN_NM', 'DEAL_YMD', 'BUILD_YEAR'])
+                ['물건금액대', '건물유형', '지번구분명', '거래일', '건축일'])
+            
             
             if len(options) != 0:
                 st.divider()
                 st.write('키워드 검색 결과')
                 st.caption('각 탭을 누르면 오름차순(내림차순) 확인이 가능합니다.')
                 # groupby로 뭔가 될 듯 한데...
-                st.write(filtered_data_year[options])
+                # st.write(filtered_data_year[options])
                     
 
         with tab3:
