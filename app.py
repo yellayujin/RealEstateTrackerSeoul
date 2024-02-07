@@ -116,13 +116,13 @@ def main():
         # 구 선택
         sgg_nm_sort=sorted(df['SGG_NM'].unique())
         selected_sgg_nm = st.selectbox(
-            '구를 선택하세요.',
+            '자치구를 선택하세요.',
             options=list(sgg_nm_sort), index = None
         )   
 
         # 동 선택(조건: 선택된 구 안에 있는 동을 보여줘야 함)
-        selected_bjdong_nm = st.selectbox('법정동명', 
-                                            options= sorted(df.loc[df['SGG_NM']==selected_sgg_nm, :].BJDONG_NM.unique()))
+        selected_bjdong_nm = st.selectbox('법정동을 선택하세요', 
+                                            options= sorted(df.loc[df['SGG_NM']==selected_sgg_nm, :].BJDONG_NM.unique()), index=None)
         st.divider()
         
         # 홈 화면 버튼
@@ -260,7 +260,7 @@ def main():
         tab1, tab2, tab3 = st.tabs(["한눈에 보기", "키워드 상세 조회", "타 법정동 비교"])
         with tab1:
             st.subheader('거래 금액')
-            st.markdown('선택한 지역의 거래금액을 서울시 전체의 매매건과 비교하여 보여드립니다!')
+            st.markdown(f'{selected_sgg_nm} {selected_bjdong_nm}의 거래금액을 서울시 전체의 매매건과 비교하여 보여드립니다!')
             
             col1, col2, col3 = st.columns(3)
             with col1: 
