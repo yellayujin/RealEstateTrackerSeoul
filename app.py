@@ -308,7 +308,7 @@ def main():
 
             if options != None:
                 st.divider()
-                st.write('키워드 검색 결과')
+                st.subheader('키워드 검색 결과')
                 st.caption('각 탭을 누르면 오름차순(내림차순) 확인이 가능합니다.')
                 col = []
                 key = options
@@ -317,7 +317,7 @@ def main():
                 table = pd.DataFrame(filtered_data_year.groupby(by = colname, observed=True))
                 unique = []
                 for i in table.iloc[:,0]:
-                    st.write(f'{key}: {i}')
+                    st.write(f'{i}')
                     st.write(filtered_data_year[filtered_data_year[colname] == i].describe().T)
                     unique.append(i)
                 st.divider()
