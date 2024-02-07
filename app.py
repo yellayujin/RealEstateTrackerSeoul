@@ -321,7 +321,7 @@ def main():
                     st.write(filtered_data_year[filtered_data_year[colname] == i].describe().T)
                     unique.append(i)
                 st.divider()
-                st.write(f'유형 별 전체 데이터 조회')
+                st.subheader(f'유형 별 전체 데이터 조회')
                 selected_unique = st.radio('조회할 유형 선택', unique)
                 if selected_unique == '단독다가구':
                     st.caption('Note: 단독 다가구의 경우 본번, 부번과 같은 상세정보는 제공되지 않습니다.')
