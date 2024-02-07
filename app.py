@@ -293,17 +293,17 @@ def main():
 
         with tab2: 
             options_df = ['OBJ_AMT_LV', 'HOUSE_TYPE', 'LAND_GBN_NM', 'DEAL_YMD', 'BUILD_YMD']
-            options_dict = {'물건금액대':'OBJ_AMT_LV', '건물유형':'HOUSE_TYPE', '지번구분명':'LAND_GBN_NM', '거래일':'DEAL_YMD', '건축연도':'BUILD_YEAR'}
+            options_dict = {'물건금액대':'OBJ_AMT_LV', '건물유형':'HOUSE_TYPE', '지번구분명':'LAND_GBN_NM', '거래연도':'DEAL_YMD', '건축연도':'BUILD_YEAR'}
             
             st.write(f'{selected_sgg_nm} {selected_bjdong_nm}의 실거래건 중 관심있는 정보를 확인하세요!')
             filtered_data_year['OBJ_AMT_LV'] = pd.cut(filtered_data_year['OBJ_AMT'], bins = [0, 10000, 50000, 100000, 150000, 200000, 3000000], labels = ['1억 미만','1억~5억', '5억~10억', '10억~20억', '20억~25억', '25억 이상'], include_lowest=True)
-            filtered_data_year['DEAL_YMD'] = filtered_data_year['DEAL_YMD'].dt.date
+            filtered_data_year['DEAL_YMD'] = filtered_data_year['DEAL_YMD'].dt.year
             filtered_data_year['BUILD_YEAR'] = np.where(filtered_data_year['BUILD_YEAR']==np.nan, 0, filtered_data_year['BUILD_YEAR'])
-            filtered_data_year = filtered_data_year.astype({'BUILD_YEAR':'str'})    
+            filtered_data_year = filtered_data_year.astype({'BUILD_YEAR':'str', 'DEAL_YMD':'str'})    
             filtered_data_year['BUILD_YEAR'] = filtered_data_year['BUILD_YEAR'].str[:4]
             options = st.selectbox(
                 '관심 키워드를 선택하세요.', options_dict.keys(), index=None)
-                # ['물건금액대', '건물유형', '지번구분명', '거래일', '건축일']
+                # ['물건금액대', '건물유형', '지번구분명', '거래연도', '건축일']
             
 
             if options != None:
@@ -315,14 +315,17 @@ def main():
                 colname = options_dict[key]
                 col.append(options_dict[key])
                 table = pd.DataFrame(filtered_data_year.groupby(by = colname, observed=True))
+
                 unique = []
                 for i in table.iloc[:,0]:
-                    st.write(f'{i}')
-                    st.write(filtered_data_year[filtered_data_year[colname] == i].describe().T)
+                    # st.write(f'{i}')
                     unique.append(i)
-                st.divider()
-                st.subheader(f'유형 별 전체 데이터 조회')
                 selected_unique = st.radio('조회할 유형 선택', unique)
+                st.write('유형 별 요약정보')
+                st.write(filtered_data_year[filtered_data_year[colname] == selected_unique].describe().T)
+
+                st.write(f'유형 별 전체 데이터 조회')
+                # selected_unique = st.radio('조회할 유형 선택', unique)
                 if selected_unique == '단독다가구':
                     st.caption('Note: 단독 다가구의 경우 본번, 부번과 같은 상세정보는 제공되지 않습니다.')
                 st.write(filtered_data_year[filtered_data_year[colname] == selected_unique])
