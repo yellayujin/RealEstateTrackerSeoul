@@ -296,7 +296,7 @@ def main():
             options_dict = {'물건금액대':'OBJ_AMT_LV', '건물유형':'HOUSE_TYPE', '지번구분명':'LAND_GBN_NM', '거래일':'DEAL_YMD', '건축연도':'BUILD_YEAR'}
             
             st.write(f'{selected_sgg_nm} {selected_bjdong_nm}의 실거래건 중 관심있는 정보를 확인하세요!')
-            filtered_data_year['OBJ_AMT_LV'] = pd.qcut(filtered_data_year['OBJ_AMT'], q = 5, labels = ['낮은 가격대', '중간낮은 가격대', '중간 가격대', '중간높은 가격대', '높은 가격대'])
+            filtered_data_year['OBJ_AMT_LV'] = pd.cut(filtered_data_year['OBJ_AMT'], bins = [0, 10000, 50000, 100000, 150000, 200000, 3000000], labels = ['1억 미만','1억~5억', '5억~10억', '10억~20억', '20억~25억', '25억 이상'], include_lowest=True)
             filtered_data_year['DEAL_YMD'] = filtered_data_year['DEAL_YMD'].dt.date
             filtered_data_year['BUILD_YEAR'] = np.where(filtered_data_year['BUILD_YEAR']==np.nan, 0, filtered_data_year['BUILD_YEAR'])
             filtered_data_year = filtered_data_year.astype({'BUILD_YEAR':'str'})    

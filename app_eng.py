@@ -2,6 +2,7 @@
 
 import streamlit as st 
 import pandas as pd
+import numpy as np
 from data_collect import load_data
 from data_collect import Range  
 from data_collect import load_geojsondata   
@@ -11,77 +12,147 @@ from datetime import datetime
 import requests
 from io import StringIO
 
+Sure, here are comments explaining each function:
+
+python
+Copy code
 def load_deals_by_month(df, year, month):
-    # Load transaction data for the specified year and month
-    target_month = f'{year}-{month:02d}'
-    deals = df[df['DEAL_YMD'].dt.to_period('M') == pd.Period(target_month, freq='M')]
-    deals['count'] = 1  # Add a count column
-    deal_count = deals.shape[0]
-    return deals, deal_count
+    # Function to retrieve transaction data corresponding to the specified year and month
+    target_month = f'{year}-{month:02d}'  # Format year and month into YYYY-MM format
+    deals = df[df['DEAL_YMD'].dt.to_period('M') == pd.Period(target_month, freq='M')]  # Filter dataframe by year and month
+    deals['count'] = 1  # Add count column for each transaction
+    deal_count = deals.shape[0]  # Count the number of deals
+    return deals, deal_count  # Return filtered dataframe and deal count
+
 
 def find_highest_increase_area(df, current_month, comparison_month):
-    # Load transaction data for the reference month
-    current_month_deals, current_month_deal_count = load_deals_by_month(df, *current_month)
-
-    # Load transaction data for the comparison month
-    comparison_month_deals, comparison_month_deal_count = load_deals_by_month(df, *comparison_month)
-
-    # Calculate the transaction volume for the reference and comparison months
+    # Function to find the borough with the highest increase in transaction volume
+    current_month_deals, current_month_deal_count = load_deals_by_month(df, *current_month)  # Load data for the current month
+    comparison_month_deals, comparison_month_deal_count = load_deals_by_month(df, *comparison_month)  # Load data for the comparison month
+    
+    # Calculate transaction counts for current and comparison months by borough
     current_month_deal_counts = current_month_deals['SGG_NM'].value_counts()
     comparison_month_deal_counts = comparison_month_deals['SGG_NM'].value_counts()
-
-    # Calculate the increase rate in transaction volume
+    
+    # Calculate percentage increase in transaction counts
     increase_rates = (current_month_deal_counts - comparison_month_deal_counts) / comparison_month_deal_counts * 100
-
-    # Find the district with the highest increase rate
+    
+    # Find the borough with the highest increase rate
     highest_increase_area = increase_rates.idxmax()
     highest_increase_rate = round(increase_rates.max(), 1)
+    
+    return highest_increase_area, highest_increase_rate  # Return borough with highest increase and its rate
 
-    return highest_increase_area, highest_increase_rate
 
 def find_most_active_area(deals):
-    # Find the district with the highest transaction volume
-    most_active_area = deals['SGG_NM'].value_counts().idxmax()
-    most_active_count = deals['SGG_NM'].value_counts().max()
-    return most_active_area, most_active_count
+    # Function to find the borough with the highest transaction volume
+    most_active_area = deals['SGG_NM'].value_counts().idxmax()  # Find borough with highest transaction count
+    most_active_count = deals['SGG_NM'].value_counts().max()  # Get the count of transactions for the most active borough
+    return most_active_area, most_active_count  # Return most active borough and its transaction count
+
 
 def find_highest_avg_amt_area(df, year, month):
-    # Load transaction data for the specified year and month
-    target_month = f'{year}-{month:02d}'
-    deals = df[df['DEAL_YMD'].dt.to_period('M') == pd.Period(target_month, freq='M')]
-
-    # Calculate the average OBJ_AMT by district
+    # Function to find the borough with the highest average transaction amount
+    target_month = f'{year}-{month:02d}'  # Format year and month into YYYY-MM format
+    deals = df[df['DEAL_YMD'].dt.to_period('M') == pd.Period(target_month, freq='M')]  # Filter dataframe by year and month
+    
+    # Calculate average transaction amount by borough
     avg_amt_by_area = deals.groupby('SGG_NM')['OBJ_AMT'].mean()
-
-    # Find the district with the highest average value
+    
+    # Find the borough with the highest average transaction amount
     highest_avg_amt_area = avg_amt_by_area.idxmax()
     highest_avg_amt_value = avg_amt_by_area.max()
+    
+    return highest_avg_amt_area, highest_avg_amt_value  # Return borough with highest average amount and its value
 
-    return highest_avg_amt_area, highest_avg_amt_value
 
 def get_darker_color(color, factor=0.7):
-    """
-    Function to get a darker shade of a given color.
-    """
-    r, g, b = [int(color[i:i+2], 16) for i in (1, 3, 5)]
-    r = max(0, int(r * factor))
-    g = max(0, int(g * factor))
-    b = max(0, int(b * factor))
-    return f"#{r:02x}{g:02x}{b:02x}"
+    # Function to darken a given color by a specified factor
+    r, g, b = [int(color[i:i + 2], 16) for i in (1, 3, 5)]  # Convert hex color to RGB
+    r = max(0, int(r * factor))  # Darken red component
+    g = max(0, int(g * factor))  # Darken green component
+    b = max(0, int(b * factor))  # Darken blue component
+    return f"#{r:02x}{g:02x}{b:02x}"  # Format RGB back to hex and return the darker color
+These comments explain the purpose of each function and provide a brief description of what each part of the function does.
+
+번역결과
+
+물론입니다. 각 기능을 설명하는 설명은 다음과 같습니다.
+
+python
+Copy code
+def load_deals_by_month(df, year, month):
+    # Function to retrieve transaction data corresponding to the specified year and month
+    target_month = f'{year}-{month:02d}'  # Format year and month into YYYY-MM format
+    deals = df[df['DEAL_YMD'].dt.to_period('M') == pd.Period(target_month, freq='M')]  # Filter dataframe by year and month
+    deals['count'] = 1  # Add count column for each transaction
+    deal_count = deals.shape[0]  # Count the number of deals
+    return deals, deal_count  # Return filtered dataframe and deal count
+
+
+def find_highest_increase_area(df, current_month, comparison_month):
+    # Function to find the borough with the highest increase in transaction volume
+    current_month_deals, current_month_deal_count = load_deals_by_month(df, *current_month)  # Load data for the current month
+    comparison_month_deals, comparison_month_deal_count = load_deals_by_month(df, *comparison_month)  # Load data for the comparison month
+    
+    # Calculate transaction counts for current and comparison months by borough
+    current_month_deal_counts = current_month_deals['SGG_NM'].value_counts()
+    comparison_month_deal_counts = comparison_month_deals['SGG_NM'].value_counts()
+    
+    # Calculate percentage increase in transaction counts
+    increase_rates = (current_month_deal_counts - comparison_month_deal_counts) / comparison_month_deal_counts * 100
+    
+    # Find the borough with the highest increase rate
+    highest_increase_area = increase_rates.idxmax()
+    highest_increase_rate = round(increase_rates.max(), 1)
+    
+    return highest_increase_area, highest_increase_rate  # Return borough with highest increase and its rate
+
+
+def find_most_active_area(deals):
+    # Function to find the borough with the highest transaction volume
+    most_active_area = deals['SGG_NM'].value_counts().idxmax()  # Find borough with highest transaction count
+    most_active_count = deals['SGG_NM'].value_counts().max()  # Get the count of transactions for the most active borough
+    return most_active_area, most_active_count  # Return most active borough and its transaction count
+
+
+def find_highest_avg_amt_area(df, year, month):
+    # Function to find the borough with the highest average transaction amount
+    target_month = f'{year}-{month:02d}'  # Format year and month into YYYY-MM format
+    deals = df[df['DEAL_YMD'].dt.to_period('M') == pd.Period(target_month, freq='M')]  # Filter dataframe by year and month
+    
+    # Calculate average transaction amount by borough
+    avg_amt_by_area = deals.groupby('SGG_NM')['OBJ_AMT'].mean()
+    
+    # Find the borough with the highest average transaction amount
+    highest_avg_amt_area = avg_amt_by_area.idxmax()
+    highest_avg_amt_value = avg_amt_by_area.max()
+    
+    return highest_avg_amt_area, highest_avg_amt_value  # Return borough with highest average amount and its value
+
+
+def get_darker_color(color, factor=0.7):
+    # Function to darken a given color by a specified factor
+    r, g, b = [int(color[i:i + 2], 16) for i in (1, 3, 5)]  # Convert hex color to RGB
+    r = max(0, int(r * factor))  # Darken red component
+    g = max(0, int(g * factor))  # Darken green component
+    b = max(0, int(b * factor))  # Darken blue component
+    return f"#{r:02x}{g:02x}{b:02x}" 
+
 
 def plot_pie_chart(deals):
     colors = px.colors.sequential.Blues
 
     fig = px.pie(deals, 
                  names='SGG_NM', 
-                 title='Transaction Ratio by Autonomous District in Seoul, May 2023',
+                 title='Percentage of transactions by Seoul borough',
                  color='SGG_NM',
                  color_discrete_sequence=colors,
-                 labels={'SGG_NM': 'District Name'},
-                 hole=0.3,
+                 labels={'SGG_NM': 'Borough'},
+                 hole=0.4,
                  )
 
-    fig.update_traces(textposition='inside', textinfo='percent+label', pull=[0.1, 0.1, 0.1, 0.1])  
+    fig.update_traces(textposition='inside', textinfo='percent+label', pull = [0, 0,0, 0, 0, 0, 0.1])  
     fig.update_layout(
         showlegend=False,  
         margin=dict(l=0, r=0, b=0, t=30),  
@@ -93,52 +164,60 @@ def plot_pie_chart(deals):
 
 
 def plot_bar_chart(deals):
-    fig = px.bar(deals, x='HOUSE_TYPE', title='Real Estate Transactions by Type in Seoul, May 2023', labels={'HOUSE_TYPE': 'Property Type', 'count': 'Number of Transactions'})
-    fig.update_layout(xaxis_title='Property Type', yaxis_title='Number of Transactions')
-    st.plotly_chart(fig, use_container_width=True)
+    fig = px.bar(deals, x = 'HOUSE_TYPE', title = 'Number of Real Estate Transactions by Type in May 2023', labels = {'HOUSE_TYPE': 'Property type', 'count': 'Transaction count'})
+    fig.update_layout(xaxis_title = 'Property type', yaxis_title = 'Transaction count')
+    st.plotly_chart(fig, use_container_width= True)
+
 
 def main():
     
-    df = load_data()
+    df=load_data()
+    df['DEAL_YMD'] = pd.to_datetime(df['DEAL_YMD'], format = '%Y%m%d') # Convert date type
+    df['CNTL_YMD'] = pd.to_datetime(df['CNTL_YMD'], format = '%Y%m%d').dt.date
+    df = df.astype({'ACC_YEAR': 'str', 'BONBEON': 'str', 'BUBEON': 'str'}) # The main number and sub-number are appended with .0 at the end (due to missing?), and the year of construction is I'll pass for a moment because of the calculations later (tab3, line 263).
+    
+    df['BONBEON'] = df['BONBEON'].str.rstrip('.0')
+    df['BUBEON'] = df['BUBEON'].str.rstrip('.0')
 
-    # Sidebar
-    # Search data by code?
+    # sidebar
     with st.sidebar:
-        st.header('Filter')
-        st.subheader('We will analyze actual transaction data for the selected region!')
-        # Choose autonomous district
-        selected_sgg_nm = st.selectbox('District Name', options=df['SGG_NM'].unique(), index=None, placeholder='Select a district.')
+        st.header('🔎Local Search')  # Header for local search section
+        st.subheader('We will analyze actual transaction data for the selected region!')  # Subheader explaining the purpose of the analysis
+        
+        # Select borough
+        sgg_nm_sort = sorted(df['SGG_NM'].unique())  # Sort and get unique borough names
+        selected_sgg_nm = st.selectbox(
+            'Select a borough.',
+            options=list(sgg_nm_sort), index=None
+        )
 
-        # Choose a dong (Condition: Show only neighborhoods within the selected district)
-        selected_bjdong_nm = st.selectbox('Legal Dong Name',
-                                          options=df.loc[df['SGG_NM'] == selected_sgg_nm, :].BJDONG_NM.unique())
+        # Select a neighborhood within the selected borough
+        selected_bjdong_nm = st.selectbox('Select Beopjeong-dong',
+                                            options=sorted(df.loc[df['SGG_NM'] == selected_sgg_nm, :].BJDONG_NM.unique()), index=None)
         st.divider()
         
         # Home screen button
-
+        
         # Select language
         st.subheader('Language')
-        lang = st.radio('Select Your Language', ['English', 'Korean'], index=0)
-        if lang == 'Korean':
-            st.page_link('https://yellayujin-miniproject2-app-dlixks.streamlit.app/', label='Click here to explore in Korean') 
-                
-        st.divider()
+        lang = st.radio('Select Your Language', ['English', 'Korean'], index=1)  # Radio button to choose language
+        if lang == 'English':
+            st.page_link('https://yellayujin-miniproject2-app-eng-aapmoa.streamlit.app/', label='Click here to explore in English')  # Link to explore in English
 
+        st.divider()
 
     # Select the data you want to output
     filtered_data = df.loc[(df['SGG_NM'] == selected_sgg_nm) & (df['BJDONG_NM'] == selected_bjdong_nm)]
 
-
-    if selected_bjdong_nm == None:
+    if selected_bjdong_nm is None:
         # Styling for adding margins
         main_style = """
             padding: 10px;
             margin: 50px;
             """
 
-        st.title('dashboard name')
-        st.markdown('Introductory text')
-
+        st.title('Real Estate Tracker: Seoul')  # Title for the Real Estate Tracker: Seoul section
+        st.markdown('Check through the real estate tracker when you want to obtain information on the entire real estate transaction volume and statistics in Seoul and find out transaction trends by real estate type by region!')  # Description of the real estate tracker
 
         # Calculate trading volume for May 2023
         may_2023_deals, may_2023_deal_count = load_deals_by_month(df, 2023, 5)
@@ -156,129 +235,60 @@ def main():
         # Find the borough with the highest average transaction price
         highest_avg_amt_area, highest_avg_amt_value = find_highest_avg_amt_area(may_2023_deals, 2023, 5)
 
-
-        # Create four spaces
+        # Create four columns
         col1, col2, col3, col4 = st.columns(4)
-    
+
         # Add content to each cell
-        st.caption('As of May 2023')
+        st.caption('As of May 2023')  # Caption indicating the date
         with col1:
+            # Display total transaction volume in Seoul
             st.markdown(f'<div style="border: 1px solid white; padding: 10px; box-shadow: 2px,2px,5px rgba(0,0,0,0.1); "><h6>Total transaction volume in Seoul</h6><br><br><h3 style="text-align: center;">{may_2023_deal_count}</h3><br></div>', unsafe_allow_html=True)
         with col2:
-            st.markdown(f'<div style="border: 1px solid white; padding: 10px; box-shadow: 2px,2px,5px rgba(0,0,0,0.1);"><h6>Highest transaction volume <br>Increased borough</h6><br><h3 style="text-align: center;">{highest_increase_area}<br><p style="text-align: right;">({highest_increase_rate}% increase )</div>', unsafe_allow_html=True)
+            # Display borough with the highest transaction volume increase
+            st.markdown(f'<div style="border: 1px solid white; padding: 10px; box-shadow: 2px,2px,5px rgba(0,0,0,0.1);"><h6>Highest transaction volume Increased borough</h6><br><h3 style="text-align: center;">{highest_increase_area}<br><p style="text-align: right;">({highest_increase_rate}% increase )</div>', unsafe_allow_html=True)
         with col3:
-            st.markdown(f'<div style="border: 1px solid white; padding: 10px; box-shadow: 2px,2px,5px rgba(0,0,0,0.1);"><h6>Highest transaction volume<br>Many boroughs</h6><br><h3 style="text-align: center;">{most_active_area}<br><p style="text-align: right;">({most_active_count} cases increase) </div>', unsafe_allow_html=True)
+            # Display borough with the highest transaction volume
+            st.markdown(f'<div style="border: 1px solid white; padding: 10px; box-shadow: 2px,2px,5px rgba(0,0,0,0.1);"><h6>Highest transaction volume Many boroughs</h6><br><h3 style="text-align: center;">{most_active_area}<br><p style="text-align: right;">({most_active_count} cases increase) </div>', unsafe_allow_html=True)
         with col4:
+            # Display borough with the highest average transaction price
             st.markdown(f'<div style="border: 1px solid white; padding: 10px; box-shadow: 2px,2px,5px rgba(0,0,0,0.1);">'
-                    f'<h6>Borough with the highest average transaction price</h6>'
-                    f'<br><h3 style="text-align: center; ">{highest_avg_amt_area}<br>'
-                    f'<p style="text-align: right; ">({(highest_avg_amt_value*1000): ,.0f} 10,000 won)</div>', unsafe_allow_html=True)
+                        f'<h6>Borough with the highest average transaction price</h6>'
+                        f'<br><h3 style="text-align: center; ">{highest_avg_amt_area}<br>'
+                        f'<p style="text-align: right; ">({(highest_avg_amt_value*1000):,.0f} 10,000 won)</div>', unsafe_allow_html=True)
 
         # Draw a pie chart
         plot_pie_chart(may_2023_deals)
 
+        # Initialize the maximum and minimum values for each building use
+        values = {
+            'apartment': {'max_amount': None, 'min_amount': None, 'max_location': None, 'min_location': None, 'max_building': None, 'min_building': None},
+            'Officetel': {'max_amount': None, 'min_amount': None, 'max_location': None, 'min_location': None, 'max_building': None, 'min_building': None},
+            'Multi-generational': {'max_amount': None, 'min_amount': None, 'max_location': None, 'min_location': None, 'max_building': None, 'min_building': None},
+            'Single-family home': {'max_amount': None, 'min_amount': None, 'max_location': None, 'min_location': None, 'max_building': None, 'min_building': None}
+        }
 
-    # The page is displayed when the region is selected
-    if selected_bjdong_nm != None:
-        tab1, tab2, tab3 = st.tabs(["At a glance", "Keyword detailed search", "Comparison of other legal districts"])
-        with tab1:
-            st.subheader('Transaction Amount')
-            st.markdown('We show the transaction amount in the selected area by comparing it with the transactions in the entire city of Seoul!')
+        for house_type in ['apartment', 'officetel', 'row multi-family', 'single-family multi-family']:
+            # Filter data for the relevant building use
+            filtered_data = df[df['HOUSE_TYPE'] == house_type]
             
-            col1, col2, col3 = st.columns(3)
-            with col1:
-                st.metric(label='Mean (10,000 won)', value=round(filtered_data.OBJ_AMT.mean(), 1), delta=round(filtered_data.OBJ_AMT.mean() - df.OBJ_AMT.mean(), 1 ))
-            with col2:
-                st.metric(label='Maximum (10,000 won)', value=round(filtered_data.OBJ_AMT.max(), 1), delta=str(round(filtered_data.OBJ_AMT.max() - df.OBJ_AMT.max() , 1)))
-            with col3:
-                st.metric(label='Minimum (10,000 won)', value=round(filtered_data.OBJ_AMT.min(), 1), delta=str(round(filtered_data.OBJ_AMT.min() - df.OBJ_AMT.min() , 1)))
-
-            st.divider()
-            st.subheader('Number of transactions')
-            # Comparison of transaction number trends in 2020, 21, 22, and 23??
-
-            # Transaction date in date format
-            # filtered_data['DEAL_YMD_dt'] = pd.to_datetime(filtered_data['DEAL_YMD'], format='ISO8601')
-
-            # Trading volume by year -> It would be good to combine each year into one graph.
-            year = st.radio("Select a year.", ['2020', '2021', '2022', '2023'])
-            filtered_data_year = filtered_data.loc[filtered_data['DEAL_YMD'].dt.year == int(year), :]
-            st.line_chart(filtered_data_year['DEAL_YMD'].dt.month_name().value_counts())
-
-
-            # Building use
-            st.subheader('Building Use')
-            st.bar_chart(filtered_data['HOUSE_TYPE'].value_counts())
-
-        with tab2:
-            st.write(f'{selected_sgg_nm} Check the information of interest among {selected_bjdong_nm}\'s actual transactions!')
-            options = st.multiselect(
-                'Select a keyword of interest.',
-                filtered_data.columns)
-            if len(options) != 0:
-                st.divider()
-                st.write('Keyword search results')
-                st.caption('Click on each tab to check ascending (descending) order.')
-                st.write(filtered_data[options])
+            # Find the maximum and minimum values in the transaction amount ('OBJ_AMT') column
+            max_amount = filtered_data['OBJ_AMT'].max()
+            min_amount = filtered_data['OBJ_AMT'].min()
             
+            # Find rows with maximum and minimum values
+            max_row = filtered_data[filtered_data['OBJ_AMT'] == max_amount].iloc[0]
+            min_row = filtered_data[filtered_data['OBJ_AMT'] == min_amount].iloc[0]
 
-        with tab3:
-            # st.header('Detailed search')
-            st.write(f'{selected_sgg_nm} Check out my other consent transactions!')
-            option = st.selectbox('Search options', options=['Search by building information', 'Search by building price'])
-            st.divider()
-            if option == 'Search with building information':
-                st.subheader(option)
-                gdf = load_geojsondata()
-                df['PYEONG'] = df['BLDG_AREA'] / 3.3
-                df['PYEONG'] = df['PYEONG'].astype('int64')
-                df['Pyeong_range'] = df['PYEONG'].apply(Range)
-                
-                selected_house_type = st.selectbox(
-                    'Choose your purpose.',
-                    options=list(df['HOUSE_TYPE'].unique())
-                )
-                floor = st.number_input('Enter the floor number', step=1, min_value=-1, max_value=68)
-                pyeong = st.number_input('Enter the square footage', step=1)
-                buildyear = st.number_input('Enter the year of construction', step=1)
-                alpha = st.slider('Select the error range', 0, 10, 1)
-                
-                filtered_df = df.loc[(df['HOUSE_TYPE'] == 'Apartment') &
-                                     ((df['FLOOR'] <= floor + alpha) & (df['FLOOR'] >= floor - alpha)) &
-                                     ((df['PYEONG'] <= pyeong + alpha) & (df['PYEONG'] >= pyeong - alpha)) &
-                                     ((df['BUILD_YEAR'] <= buildyear + alpha) & (df['BUILD_YEAR'] >= buildyear - alpha))]
-                
-                avg_obj_amt = filtered_df.groupby('SGG_NM')['OBJ_AMT'].mean().reset_index()
-                avg_obj_amt.columns = ['SGG_NM', 'Avg_Obj_Amt']
+            # Save maximum and minimum values and location information
+            values[house_type]['max_amount'] = max_amount
+            values[house_type]['min_amount'] = min_amount
+            values[house_type]['max_location'] = max_row['SGG_NM'] if not pd.isna(max_row['SGG_NM']) else ''
+            values[house_type]['max_location'] += ' ' + max_row['BJDONG_NM'] if not pd.isna(max_row['BJDONG_NM']) else ''
+            values[house_type]['max_building'] = max_row['BLDG_NM'] if not pd.isna(max_row['BLDG_NM']) else ''
+            values[house_type]['min_location'] = min_row['SGG_NM'] if not pd.isna(min_row['SGG_NM']) else ''
+            values[house_type]['min_location'] += ' ' + min_row['BJDONG_NM'] if not pd.isna(min_row['BJDONG_NM']) else ''
+            values[house_type]['min_building'] = min_row['BLDG_NM'] if not pd.isna(min_row['BLDG_NM']) else ''
 
-                # Merge geojson and dataframe
-                merged_gdf = gdf.merge(avg_obj_amt, left_on='SIG_KOR_NM', right_on='SGG_NM')
-                
-                fig = px.choropleth_mapbox(merged_gdf,
-                                           geojson=merged_gdf.geometry.__geo_interface__,
-                                           locations=merged_gdf.index,
-                                           color='Avg_Obj_Amt',
-                                           color_continuous_scale="Viridis",
-                                           mapbox_style="carto-positron",
-                                           zoom=10,
-                                           center={"lat": 37.5650172, "lon": 126.9782914},
-                                           opacity=0.5,
-                                           labels={'Avg_Obj_Amt': 'Average transaction amount'},
-                                           hover_data={'SGG_NM': True, 'Avg_Obj_Amt': True}
-                                           )
-                st.plotly_chart(fig)
-            
-            # After setting the price range, show other ward information within the same ward
-            else:
-                values = st.slider(
-                    'Select a range of values',
-                    1000.0, 100000.0, (1000.0, 4000.0))
-                st.write('Price range:', values)
-
-                others = df.loc[(df.SGG_NM == selected_sgg_nm) & (df.BJDONG_NM != selected_bjdong_nm), :]
-                st.write(others.loc[(values[0] <= others.OBJ_AMT) & (others.OBJ_AMT <= values[1]), :])
-
-if __name__ == "__main__":
-    main()
-
+        # Subheader for displaying highest/minimum price information by building use in Seoul
+        st.subheader("Highest/minimum price information by building use in Seoul")
 
