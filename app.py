@@ -127,7 +127,7 @@ def main():
         
         # 홈 화면 버튼
 
-        
+        '''
         # 언어 선택
         st.subheader('Language')
         lang = st.radio('Select Your Language', ['English', 'Korean'], index = 1)
@@ -135,6 +135,7 @@ def main():
             st.page_link('https://yellayujin-miniproject2-app-eng-aapmoa.streamlit.app/', label = 'Click here to explore in English')  
 
         st.divider()
+        '''
 
 
     # 출력하고자 하는 데이터 선택
