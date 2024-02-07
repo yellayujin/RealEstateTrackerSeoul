@@ -247,7 +247,6 @@ def main():
                 col = []
                 for key in options:
                     col.append(options_dict[key])
-                st.write(col)
                 st.write(filtered_data_year[col])                 # groupby로 뭔가 될 듯 한데...
                     
 
