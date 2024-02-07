@@ -106,15 +106,12 @@ def main():
     df['CNTL_YMD'] = pd.to_datetime(df['CNTL_YMD'], format = '%Y%m%d').dt.date
     df = df.astype({'ACC_YEAR': 'str', 'BONBEON': 'str', 'BUBEON': 'str'})  # 본번, 부번은 끝에 .0붙음(결측 때문?), 건축연도는 후에 계산(tab3, line 263)때문에 잠깐 패스
     
-    '''
-    df = df.astype({'BUILD_YEAR':'str'})    
-    df['BUILD_YEAR'] = df['BUILD_YEAR'].str.rstrip('.0')'''
     df['BONBEON'] = df['BONBEON'].str.rstrip('.0')
     df['BUBEON'] = df['BUBEON'].str.rstrip('.0')
 
     # 사이드바
     with st.sidebar:
-        st.header('Filter')
+        st.header('지역 검색')
         st.subheader('선택한 지역의 실거래 데이터를 분석해드립니다!')
         # 구 선택
         sgg_nm_sort=sorted(df['SGG_NM'].unique())
@@ -273,7 +270,6 @@ def main():
                 buildyear=st.number_input('건축연도를 입력하세요',step=1)
                 alpha=st.slider('오차범위를 선택하세요',0,10,1)
                 
-                '''df = df.astype({'BUILD_YEAR': 'int'})  # 잠깐 정수형으로'''
                 filtered_df = df.loc[(df['HOUSE_TYPE']=='아파트')&
                                     ((df['FLOOR'] <= floor+alpha)&(df['FLOOR'] >= floor-alpha))&
                                     ((df['PYEONG'] <= pyeong+alpha)&(df['PYEONG'] >= pyeong-alpha))&
@@ -301,7 +297,7 @@ def main():
                      
             else:        
                 values = st.slider(
-                    'Select a range of values',
+                    '건물 가격 범위를 설정하세요.',
                     1000.0, 3000000.0, (10000.0, 4000.0))
                 st.write('가격 범위:', values)
 
