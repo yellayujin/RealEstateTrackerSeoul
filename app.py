@@ -111,7 +111,7 @@ def main():
 
     # 사이드바
     with st.sidebar:
-        st.header('지역 검색')
+        st.header('🔎지역 검색')
         st.subheader('선택한 지역의 실거래 데이터를 분석해드립니다!')
         # 구 선택
         sgg_nm_sort=sorted(df['SGG_NM'].unique())
@@ -314,7 +314,18 @@ def main():
                 for key in options:
                     colname = options_dict[key]
                     col.append(options_dict[key])
-                    st.write(filtered_data_year.groupby(by = colname, observed=True).count())
+                    table = pd.DataFrame(filtered_data_year.groupby(by = colname, observed=True))
+                    unique = []
+                    for i in table.iloc[:,0]:
+                        st.write(i)
+                        st.write(filtered_data_year[filtered_data_year[colname] == i].describe().T)
+                        unique.append(i)
+                        st.divider()
+                    st.write(f'유형 별 전체 데이터 조회')
+                    selected_unique = st.radio('조회할 유형 선택', unique)
+                    st.write(filtered_data_year[filtered_data_year[colname] == selected_unique])
+                    st.divider()
+                    
                 # st.write(filtered_data_year[col])                 # groupby로 뭔가 될 듯 한데...
             # filtered_data_year = filtered_data_year.astype({'BUILD_YEAR':'int'})           
             
