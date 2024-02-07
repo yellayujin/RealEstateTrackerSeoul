@@ -228,10 +228,13 @@ def main():
 
         with tab2: 
             options_df = ['OBJ_AMT_LV', 'HOUSE_TYPE', 'LAND_GBN_NM', 'DEAL_YMD', 'BUILD_YMD']
-            options_dict = {'물건금액대':'OBJ_AMT', '건물유형':'HOUSE_TYPE', '지번구분명':'LAND_GBN_NM', '거래일':'DEAL_YMD', '건축일':'BUILD_YMD'}
+            options_dict = {'물건금액대':'OBJ_AMT_LV', '건물유형':'HOUSE_TYPE', '지번구분명':'LAND_GBN_NM', '거래일':'DEAL_YMD', '건축연도':'BUILD_YEAR'}
             
             st.write(f'{selected_sgg_nm} {selected_bjdong_nm}의 실거래건 중 관심있는 정보를 확인하세요!')
-            filtered_data_year['OBJ_AMT_LV'] = pd.qcut(filtered_data_year['OBJ_AMT'], q = 5, labels = ['낮음', '중간낮음', '중간', '중간높음', '높음'])
+            filtered_data_year['OBJ_AMT_LV'] = pd.qcut(filtered_data_year['OBJ_AMT'], q = 5, labels = ['낮은 가격대', '중간낮은 가격대', '중간 가격대', '중간높은 가격대', '높은 가격대'])
+            filtered_data_year['DEAL_YMD'] = filtered_data_year['DEAL_YMD'].dt.date
+            filtered_data_year = filtered_data_year.astype({'BUILD_YEAR':'str'})    
+            filtered_data_year['BUILD_YEAR'] = filtered_data_year['BUILD_YEAR'].str.rstrip('.0')
             options = st.multiselect(
                 '관심 키워드를 선택하세요.', options_dict.keys())
                 # ['물건금액대', '건물유형', '지번구분명', '거래일', '건축일']
@@ -243,8 +246,12 @@ def main():
                 st.caption('각 탭을 누르면 오름차순(내림차순) 확인이 가능합니다.')
                 col = []
                 for key in options:
+                    colname = options_dict[key]
                     col.append(options_dict[key])
-                st.write(filtered_data_year[col])                 # groupby로 뭔가 될 듯 한데...
+                    st.write(filtered_data_year.groupby(by = colname, observed=True).count())
+                # st.write(filtered_data_year[col])                 # groupby로 뭔가 될 듯 한데...
+            filtered_data_year = filtered_data_year.astype({'BUILD_YEAR':'int'})           
+            
                     
 
         with tab3:
