@@ -317,7 +317,7 @@ def main():
                 table = pd.DataFrame(filtered_data_year.groupby(by = colname, observed=True))
                 unique = []
                 for i in table.iloc[:,0]:
-                    st.write(i)
+                    st.write(f'{key}: {i}')
                     st.write(filtered_data_year[filtered_data_year[colname] == i].describe().T)
                     unique.append(i)
                 st.divider()
