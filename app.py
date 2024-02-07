@@ -320,7 +320,7 @@ def main():
                     st.write(i)
                     st.write(filtered_data_year[filtered_data_year[colname] == i].describe().T)
                     unique.append(i)
-                    st.divider()
+                st.divider()
                 st.write(f'유형 별 전체 데이터 조회')
                 selected_unique = st.radio('조회할 유형 선택', unique)
                 if selected_unique == '단독다가구':
