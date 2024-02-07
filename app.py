@@ -306,7 +306,7 @@ def main():
                 # ['물건금액대', '건물유형', '지번구분명', '거래일', '건축일']
             
 
-            if len(options) != 0:
+            if options == None:
                 st.divider()
                 st.write('키워드 검색 결과')
                 st.caption('각 탭을 누르면 오름차순(내림차순) 확인이 가능합니다.')
