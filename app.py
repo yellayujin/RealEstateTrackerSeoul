@@ -262,13 +262,15 @@ def main():
             st.subheader('거래 금액')
             st.markdown(f'{selected_sgg_nm} {selected_bjdong_nm}의 거래금액을 서울시 전체의 매매건과 비교하여 보여드립니다!')
             
+            # round(filtered_data.OBJ_AMT.mean(), 1)
+            # '{0:,}'.format(round(filtered_data.OBJ_AMT.mean(), 1))
             col1, col2, col3 = st.columns(3)
             with col1: 
-                st.metric(label = '평균(만 원)', value = round(filtered_data.OBJ_AMT.mean(), 1), delta = round(filtered_data.OBJ_AMT.mean() - df.OBJ_AMT.mean(), 1))
+                st.metric(label = '평균(만 원)', value = '{0:,}'.format(round(filtered_data.OBJ_AMT.mean(), 1)), delta = '{0:,}'.format(round(filtered_data.OBJ_AMT.mean() - df.OBJ_AMT.mean(), 1)))
             with col2: 
-                st.metric(label = '최대(만 원)', value = round(filtered_data.OBJ_AMT.max(), 1), delta = str(round(filtered_data.OBJ_AMT.max() - df.OBJ_AMT.max(), 1)))
+                st.metric(label = '최대(만 원)', value = '{0:,}'.format(round(filtered_data.OBJ_AMT.max(), 1)), delta = str('{0:,}'.format(round(filtered_data.OBJ_AMT.max() - df.OBJ_AMT.max(), 1))))
             with col3: 
-                st.metric(label = '최소(만 원)', value = round(filtered_data.OBJ_AMT.min(), 1), delta = str(round(filtered_data.OBJ_AMT.min() - df.OBJ_AMT.min(), 1)))
+                st.metric(label = '최소(만 원)', value = '{0:,}'.format(round(filtered_data.OBJ_AMT.min(), 1)), delta = str('{0:,}'.format(round(filtered_data.OBJ_AMT.min() - df.OBJ_AMT.min(), 1))))
 
             st.divider()
             st.subheader('월별 거래 건수 추이') 
