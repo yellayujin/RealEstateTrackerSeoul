@@ -120,11 +120,11 @@ streamlit run app.py
   + [00발표자료_2024](portfolio.pdf)
  
 ## 팀원 소개
-- 나한울 팀장 : 
-- 김영환 팀원 : https://github.com/younghwangit/
-- 양인선 팀원 : 
+- 나한울 팀장 : https://github.com/ghkstod/streamlit_minimi
+- 김영환 팀원 : https://github.com/younghwangit/mulcamp-mini-project
+- 양인선 팀원 : https://github.com/swflora/miniproject_2024
 - 이상훈 팀원 : 
-- 정소영 팀원 : 
+- 정소영 팀원 : https://github.com/Jsoyoung/miniproject-RealEstateSeoul
 - 황유진 팀원 : https://github.com/yellayujin/RealEstateTrackerSeoul
 
 ## License
