@@ -77,10 +77,10 @@ streamlit run app.py
     - / 한눈에 보기 / 키워드 상세 조회 / 타 법정동 비교 /
 
 
-- `sgg_nm_sort: 자치구`
-- `selected_sgg_nm: 선택된 자치구 `
-- `selected_bjdong_nm: 선택된 법정동`
-- `filtered_data: 선택된 자치구와 법정동 데이터`
+- `sgg_nm_sort`: 자치구
+- `selected_sgg_nm`: 선택된 자치구 
+- `selected_bjdong_nm`: 선택된 법정동
+- `filtered_data`: 선택된 자치구와 법정동 데이터
 
 
 
@@ -89,8 +89,8 @@ streamlit run app.py
 <p align = "center" width = "200%">
   <img src = "image1.png" width = "200%" height = '150%'></img><br/>
   <img src = "image2.png" width = "30%" height = '50%'></img>
-  <img src = "image3.png" width = "30%" height = '50%'></img>
-  <img src = "image4.png" width = "30%" height = '50%'></img>
+  <img src = "image3.png" width = "30%" height = '45%'></img>
+  <img src = "image4.png" width = "30%" height = '43%'></img>
 </p>
 
 
@@ -101,10 +101,10 @@ streamlit run app.py
 - `DEAL_YMD` 컬럼의 데이터를 문자열 데이터로 변환하여 형식을 통일했습니다.
 - `BLDG_AREA` 데이터를 활용하여 `Pyeong` 데이터를 생성하고 `Range()` 함수를 통해 범주화했습니다.
 
-- `df: csv파일의 형태로 출력한 데이터셋`
-- `DEAL_YMD: 계약일`
-- `Pyeong: 평수 (BLDG_AREA/3.3)`
-- `Pyeong_range: 평수를 10평 단위로 범주화`
+- `df`: csv파일의 형태로 출력한 데이터셋
+- `DEAL_YMD`: 계약일
+- `Pyeong`: 평수 (BLDG_AREA/3.3)
+- `Pyeong_range`: 평수를 10평 단위로 범주화
 
 
 ## 코드 에러 문의 
