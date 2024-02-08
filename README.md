@@ -25,7 +25,7 @@
 - 원격 저장소의 주소를 복사한 다음 로컬 환경에 복제합니다.
 
 ```bash
-git clone "https://github.com/yellayujin/miniproject2.git"  
+git clone "https://github.com/yellayujin/RealEstateTrackerSeoul.git"  
 ```
 
 - 폴더 최상위 경로에서 가상환경을 설치합니다.
