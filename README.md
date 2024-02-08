@@ -86,11 +86,11 @@ streamlit run app.py
 
 
 - 결과 이미지
-<p align = "center" width = "100%">
-  <img src = "image1.png" width = "60%" height = '100%'></img><br/>
-  <img src = "image2.png" width = "20%" height = '40%'></img>
-  <img src = "image3.png" width = "20%" height = '37%'></img>
-  <img src = "image4.png" width = "20%" height = '35%'></img>
+<p align = "center" width = "200%">
+  <img src = "image1.png" width = "200%" height = '100%'></img><br/>
+  <img src = "image2.png" width = "40%" height = '90%'></img>
+  <img src = "image3.png" width = "40%" height = '70%'></img>
+  <img src = "image4.png" width = "40%" height = '70%'></img>
 </p>
 
 
