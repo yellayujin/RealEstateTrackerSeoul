@@ -123,7 +123,7 @@ streamlit run app.py
 - 나한울 팀장 : https://github.com/ghkstod/streamlit_minimi
 - 김영환 팀원 : https://github.com/younghwangit/mulcamp-mini-project
 - 양인선 팀원 : https://github.com/swflora/miniproject_2024
-- 이상훈 팀원 : 
+- 이상훈 팀원 : https://github.com/less927/mp240208
 - 정소영 팀원 : https://github.com/Jsoyoung/miniproject-RealEstateSeoul
 - 황유진 팀원 : https://github.com/yellayujin/RealEstateTrackerSeoul
 
